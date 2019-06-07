@@ -21,7 +21,7 @@ RUN wget -O /esp/esp-32-toolchain.tar.gz https://dl.espressif.com/dl/xtensa-esp3
    
 # Install ESP-IDF	
 WORKDIR /esp	
-RUN git clone --branch release/v3.1 --recurse-submodules https://github.com/espressif/esp-idf.git	
+RUN git clone --branch release/v3.3 --recurse-submodules https://github.com/espressif/esp-idf.git	
 
 # Setup IDF_PATH	
 ENV IDF_PATH /esp/esp-idf
