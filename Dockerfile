@@ -1,13 +1,9 @@
-FROM ubuntu:16.04
+FROM python:3
 
 # Install build dependencies (and vim for editing)
 RUN apt-get -qq update \
-    && apt-get install -y git build-essential wget cmake make ninja libncurses-dev flex bison gperf python python-serial python-dev python-pip libssl-dev libffi-dev vim unzip \
+    && apt-get install -y build-essential wget cmake make ninja-build libncurses-dev flex bison gperf libssl-dev libffi-dev vim unzip \
     && apt-get clean \
-	&& pip install --upgrade setuptools\
-	&& pip install --upgrade future \
-	&& pip install --upgrade cryptography \
-	&& pip install --upgrade esptool \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Create some directories
@@ -25,17 +21,24 @@ WORKDIR /esp
 #RUN git clone --branch release/v3.3 --recurse-submodules https://github.com/espressif/esp-idf.git
 RUN wget -O /esp/esp-idf.zip https://dl.espressif.com/dl/esp-idf/releases/esp-idf-v3.3-beta3.zip \
     && unzip /esp/esp-idf.zip -d /esp \
+    && rm /esp/esp-idf.zip \    
     && mv /esp/esp-idf-v3.3-beta3 /esp/esp-idf
 WORKDIR /esp/esp-idf
 RUN git checkout release/v3.3 \
-    && git submodule update --recursive \
+    && git submodule update --init --recursive \
     && git pull --recurse-submodules
+
+#install python module
+RUN pip install -r requirements.txt
 
 # Setup IDF_PATH	
 ENV IDF_PATH /esp/esp-idf
     
 # Add the toolchain binaries to PATH
 ENV PATH /esp/xtensa-esp32-elf/bin:$PATH
+
+# Add the idf tools to PATH
+ENV PATH /esp/esp-idf/tools:$PATH
 
 # This is the directory where our project will show up
 WORKDIR /esp/project
