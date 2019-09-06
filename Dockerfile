@@ -19,14 +19,14 @@ RUN wget -O /esp/esp-32-toolchain.tar.gz https://dl.espressif.com/dl/xtensa-esp3
 # Install ESP-IDF
 WORKDIR /esp
 #RUN git clone --branch release/v3.3 --recurse-submodules https://github.com/espressif/esp-idf.git
-RUN wget -O /esp/esp-idf.zip https://dl.espressif.com/dl/esp-idf/releases/esp-idf-v3.3-rc.zip \
+RUN wget -O /esp/esp-idf.zip https://dl.espressif.com/dl/esp-idf/releases/esp-idf-v3.3.zip \
     && unzip /esp/esp-idf.zip -d /esp \
     && rm /esp/esp-idf.zip \  
-    && mv /esp/esp-idf-v3.3-rc /esp/esp-idf
+    && mv /esp/esp-idf-v3.3 /esp/esp-idf
 WORKDIR /esp/esp-idf
-RUN git checkout release/v3.3 \
-    && git submodule update --init --recursive \
-    && git pull --recurse-submodules
+#RUN git checkout release/v3.3 \
+#    && git submodule update --init --recursive \
+#    && git pull --recurse-submodules
 
 #install python module
 RUN pip install -r requirements.txt
